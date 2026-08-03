@@ -1,0 +1,24 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #0f0f14;
+  color: #e8eef8;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* JungleScene takes a className (not a style), so its fill rule lives here */
+.jungle-scene-fill {
+  position: absolute;
+  inset: 0;
+}
