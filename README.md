@@ -29,6 +29,7 @@ A panel mounts over the page with a slider for every design parameter in the sce
 - **Reparenting is part of the UI.** Every sprite has an "attach to" dropdown listing all layers plus `— free (x/y/z) —`. The scene graph is data, so moving a mushroom cluster from the roots layer to the canopy — or detaching it into free placement — is a dropdown, not a code edit. The sprite's controls change accordingly (`anchor u`/`anchor v`/`depth off` when parented, `x`/`y`/`y @ scroll`/`depth (z)` when free).
 - **Draggable.** Grab the title bar and move the panel anywhere so it stops covering the thing you're tuning.
 - **Persistent.** Every change is written to `localStorage` immediately, so a reload keeps your state. **Copy** puts the full parameter snapshot on your clipboard as JSON, ready to paste back into the `LAYERS` / `SPRITES` / `CAM` defaults. **Reset** clears the saved state and reloads to the committed defaults.
+- **Hide toggle.** Every layer and sprite has a `hide` checkbox that drops it from the render entirely, so you can judge a composition without an element (or park one you are not ready to place). The flag lives in the snapshot like any other parameter.
 - **Orthographic toggle.** Switches the camera to an orthographic twin whose frustum matches the perspective frustum at `contentZ`, so `z` becomes pure draw order. Useful while composing: you can restack layers without perspective shifting them around.
 
 Only design parameters round-trip through the tuner. Structural fields that describe the artwork (`tex`, `aspect`, `parent` for layers, `flip`) are never written by a snapshot, so a stale `localStorage` entry can't stretch a texture.
@@ -93,7 +94,7 @@ Sprites are the small objects (moons, ferns, mushrooms). They are the same quads
 - **Static fallback.** A pre-composited poster image sits under the canvases and is the only visual on mobile, under reduced-motion, or if WebGL fails.
 - **Layout is recomputed**, not animated, on resize: a `ResizeObserver` watches both the canvas host and the scrolling section, because the anchor math depends on the section's scroll length.
 
-`JungleScene` is one self-contained component (plain `useEffect` + `useRef`, no react-three-fiber) and `JungleStage` is the ~70-line wrapper that pins it, hosts the front canvas, and applies the readability scrim over the content.
+`JungleScene` is one self-contained component (plain `useEffect` + `useRef`, no react-three-fiber) and `JungleStage` is the ~60-line wrapper that pins it and hosts the front canvas.
 
 ## Assets
 

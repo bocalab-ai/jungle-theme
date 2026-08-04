@@ -45,6 +45,8 @@ type LayerDef = {
   /** uv distance over which alpha fades to 0 at the quad's borders */
   feather?: number;
   flip?: boolean;
+  /** dropped from the render entirely (toggled from the tuner) */
+  hidden?: boolean;
 };
 
 const TREE_A_ASPECT = 3404 / 6044;
@@ -72,10 +74,10 @@ const LAYERS: LayerDef[] = [
   { name: "mid-canopy", z: 90, cover: 1.08, aspect: BAND_ASPECT, x: 0, y: 0.405, at: 0.65, fog: 0.1, sway: 0, swayFreq: 0.06, feather: 0.1 },
   { name: "tree-right", tex: "tree-b", z: 50, cover: 0.54, aspect: TREE_B_ASPECT, x: 0.47, y: 0.965, at: 0.63, fog: 0.42, sway: 0.002, swayFreq: 0.2 },
   { name: "tree-left", tex: "tree-a", z: 33, cover: 0.73, aspect: TREE_A_ASPECT, x: -0.535, y: 0.96, at: 0.2, fog: 0.23, sway: 0, swayFreq: 0 },
-  { name: "fg-leaves", z: 18, cover: 1.17, aspect: BAND_ASPECT, x: 0.055, y: 0.84, at: 0.9, fog: 0, sway: 0.01, swayFreq: 0.05, feather: 0 },
-  { name: "roots", z: 17, cover: 1.37, aspect: BAND_ASPECT, x: -0.05, y: 1.075, at: 0.58, fog: 0, sway: 0, feather: 0.14 },
+  { name: "near-foliage", z: 12, cover: 1.11, aspect: BAND_ASPECT, x: -0.04, y: 1.175, at: 0.67, fog: 0, sway: 0, swayFreq: 0.08, feather: 0 },
+  { name: "roots", z: 10, cover: 1.37, aspect: BAND_ASPECT, x: -0.05, y: 1.175, at: 0.74, fog: 0, sway: 0, feather: 0.14 },
   // the only layer nearer than contentZ, so the only one drawn over the page
-  { name: "near-foliage", z: 5, cover: 1.11, aspect: BAND_ASPECT, x: -0.04, y: 1.725, at: 0.73, fog: 0, sway: 0, swayFreq: 0.08, feather: 0 },
+  { name: "fg-leaves", z: 5, cover: 1.17, aspect: BAND_ASPECT, x: 0.055, y: 1.235, at: 0.9, fog: 0, sway: 0.01, swayFreq: 0.05, feather: 0 },
 ];
 
 type SpriteDef = {
@@ -106,6 +108,8 @@ type SpriteDef = {
   pulse?: number;
   pulseSpeed?: number;
   flip?: boolean;
+  /** dropped from the render entirely (toggled from the tuner) */
+  hidden?: boolean;
 };
 
 const SPRITES: SpriteDef[] = [
@@ -116,9 +120,9 @@ const SPRITES: SpriteDef[] = [
   // both detached from their layers in tuning; x/y/at/z are the standalone
   // equivalents of where the parent anchor put them (unparenting leaves those
   // undefined, which would otherwise pin the sprite to screen top at z 30)
-  { id: "fern-near", name: "fern", parent: "", z: 14, x: -0.29, y: 0.88, at: 0.6, h: 0.14, sway: 0.04, swayFreq: 0.45, pulse: 0.1, pulseSpeed: 0.7 },
-  { id: "fern-fg", name: "fern", parent: "", z: 17.7, x: 0.472, y: 0.874, at: 0.9, h: 0.185, fog: 0, sway: 0.03, swayFreq: 0.38, pulse: 0.1, pulseSpeed: 0.55, flip: true },
-  { id: "mushrooms-roots", name: "mushrooms", parent: "roots", u: 0.3, v: 0.62, dz: 0.3, h: 0.1, pulse: 0.3, pulseSpeed: 0.45 },
+  { id: "fern-near", name: "fern", parent: "", z: 14, x: -0.29, y: 0.88, at: 0.6, h: 0.14, sway: 0.04, swayFreq: 0.45, pulse: 0.1, pulseSpeed: 0.7, hidden: true },
+  { id: "fern-fg", name: "fern", parent: "", z: 17.7, x: 0.472, y: 0.874, at: 0.9, h: 0.185, fog: 0, sway: 0.03, swayFreq: 0.38, pulse: 0.1, pulseSpeed: 0.55, flip: true, hidden: true },
+  { id: "mushrooms-roots", name: "mushrooms", parent: "roots", u: 0.735, v: 0.715, dz: 0.2, h: 0.155, pulse: 0.3, pulseSpeed: 0.45, hidden: true },
 ];
 
 const LAYER_VERT = /* glsl */ `
@@ -238,24 +242,26 @@ function frustumHeight(dist: number) {
 // Design tuner (open the page with ?tune): live sliders for every layer,
 // sprite, and the camera. Persists to localStorage; "Copy" exports the JSON.
 // ---------------------------------------------------------------------------
-const TUNE_KEY = "jungle-tune-v6";
+const TUNE_KEY = "jungle-tune-v7";
 
 type Tunable = Record<string, unknown>;
 
 // Only DESIGN parameters round-trip through the tuner. Structural fields
 // (tex, aspect, kind, parent, flip) describe the ARTWORK, so a stale
 // snapshot must never be able to override them — that stretches the texture.
-const LAYER_TUNABLE = ["cover", "x", "y", "at", "z", "fog", "sway", "swayFreq", "feather"] as const;
+const LAYER_TUNABLE = [
+  "cover", "x", "y", "at", "z", "fog", "sway", "swayFreq", "feather", "hidden",
+] as const;
 // `parent` is editable: the scene graph is data, restructured from the panel.
 const SPRITE_TUNABLE = [
-  "h", "u", "v", "dz", "x", "y", "at", "z", "fog", "sway", "swayFreq", "pulse", "pulseSpeed", "parent",
+  "h", "u", "v", "dz", "x", "y", "at", "z", "fog", "sway", "swayFreq", "pulse", "pulseSpeed", "parent", "hidden",
 ] as const;
 
 function pick(src: Tunable, keys: readonly string[]) {
   const out: Tunable = {};
   for (const k of keys) {
     const v = src[k];
-    if (typeof v === "number" || typeof v === "string") out[k] = v;
+    if (typeof v === "number" || typeof v === "string" || typeof v === "boolean") out[k] = v;
   }
   return out;
 }
@@ -373,6 +379,24 @@ function buildTunePanel(onChange: () => void): () => void {
     return kids;
   };
 
+  const toggle = (parentEl: HTMLElement, obj: Tunable, key: string, label: string) => {
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "display:flex;align-items:center;gap:6px;margin:2px 0 4px 12px";
+    const lab = document.createElement("label");
+    lab.style.cssText = "display:flex;align-items:center;gap:6px;cursor:pointer;color:#ffd9a0";
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = !!obj[key];
+    cb.style.accentColor = "#e8b87c";
+    cb.onchange = () => {
+      obj[key] = cb.checked;
+      persist();
+    };
+    lab.append(cb, document.createTextNode(label));
+    wrap.appendChild(lab);
+    parentEl.appendChild(wrap);
+  };
+
   const row = (parentEl: HTMLElement, obj: Tunable, key: string, min: number, max: number, step: number, label = key) => {
     const wrap = document.createElement("div");
     wrap.style.cssText = "display:flex;align-items:center;gap:6px;margin:1px 0 1px 12px";
@@ -433,6 +457,7 @@ function buildTunePanel(onChange: () => void): () => void {
 
     const camNode = node(body, "camera", 0, true);
     {
+      // CAM stores ortho as 0/1, so it can't go through `toggle` (which is boolean)
       const wrap = document.createElement("div");
       wrap.style.cssText = "display:flex;align-items:center;gap:6px;margin:2px 0 4px 12px";
       const lab = document.createElement("label");
@@ -444,7 +469,6 @@ function buildTunePanel(onChange: () => void): () => void {
       cb.onchange = () => {
         CAM.ortho = cb.checked ? 1 : 0;
         persist();
-        onChange();
       };
       lab.append(cb, document.createTextNode("orthographic (z = order only)"));
       wrap.appendChild(lab);
@@ -461,6 +485,7 @@ function buildTunePanel(onChange: () => void): () => void {
   const spriteNode = (parentEl: HTMLElement, def: SpriteDef, depth: number) => {
     const d = def as unknown as Tunable;
     const el = node(parentEl, `${def.name} · ${def.id}`, depth);
+    toggle(el, d, "hidden", "hide");
     parentRow(el, def, renderBody);
     row(el, d, "h", 0.02, 0.8, 0.005, "size");
     if (def.parent) {
@@ -489,6 +514,7 @@ function buildTunePanel(onChange: () => void): () => void {
     const d = def as unknown as Tunable;
     const children = SPRITES.filter((s) => s.parent === def.name);
     const el = node(body, `${def.name}${children.length ? ` (${children.length})` : ""}`, 0);
+    toggle(el, d, "hidden", "hide");
     row(el, d, "cover", 0.1, 5, 0.01, "zoom");
     row(el, d, "x", -1, 1, 0.005, "x pos");
     row(el, d, "y", -1, 3, 0.005, "y pos");
@@ -837,6 +863,7 @@ export function JungleScene({
         mesh.scale.set(def.flip ? -pw : pw, ph, 1);
         mesh.position.set(cx, cy, -def.z);
         mesh.renderOrder = 100 - def.z;
+        mesh.userData.hidden = !!def.hidden;
         mesh.userData.art = { top: cy + ph / 2, h: ph, w: pw };
       }
       for (const mist of mists) {
@@ -871,6 +898,7 @@ export function JungleScene({
         mesh.scale.set(def.flip ? -sw : sw, sh, 1);
         mesh.position.set(ax, def.hangTop ? ay - sh / 2 : ay, -z);
         mesh.renderOrder = 100 - z;
+        mesh.userData.hidden = !!def.hidden;
       }
     }
     layout();
@@ -994,15 +1022,17 @@ export function JungleScene({
         ...spriteMeshes.map((s) => s.mesh),
         ...mists,
       ];
+      const shown = (o: THREE.Object3D) => !o.userData.hidden;
       if (frontRenderer) {
-        for (const o of splittable) o.visible = -o.position.z >= CAM.contentZ;
+        for (const o of splittable) o.visible = shown(o) && -o.position.z >= CAM.contentZ;
         points.visible = true;
         composer.render();
-        for (const o of splittable) o.visible = -o.position.z < CAM.contentZ;
+        for (const o of splittable) o.visible = shown(o) && -o.position.z < CAM.contentZ;
         points.visible = false;
         frontRenderer.render(scene, activeCamera());
         for (const o of splittable) o.visible = true;
       } else {
+        for (const o of splittable) o.visible = shown(o);
         composer.render();
       }
 

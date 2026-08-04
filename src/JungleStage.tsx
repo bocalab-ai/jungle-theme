@@ -58,16 +58,11 @@ export function JungleStage({ children }: { children: ReactNode }) {
         }}
       />
 
-      {/* Readability scrim. It lives on the CONTENT wrapper (not the pinned
-          overlay) so it scrolls with the copy: clear through the first screen,
-          then darkening the jungle behind the sections below it. */}
       <div
         style={{
           position: "relative",
           zIndex: 10,
           marginTop: "-100vh",
-          background:
-            "linear-gradient(to bottom, transparent 0%, transparent 34%, rgba(7,13,24,0.55) 52%, rgba(7,13,24,0.62) 100%)",
         }}
       >
         {children}
