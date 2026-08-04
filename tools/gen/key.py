@@ -72,8 +72,7 @@ def key_image(img, t_bg=T_BG, t_fg=T_FG, soft_px=SOFT_PX):
     soft = (a8 > 0) & (a8 < 255)
 
     out = rgb.copy()
-    scale = np.zeros_like(alpha)
-    np.divide(255.0, a8, out=scale, where=soft)
+    scale = 255.0 / np.maximum(a8.astype(np.float32), 1.0)
     out[soft] = np.clip(rgb[soft] * scale[soft][:, None], 0.0, 255.0)
     out[a8 == 0] = 0.0
 
