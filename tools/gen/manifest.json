@@ -1,0 +1,28 @@
+{
+  "$comment": {
+    "purpose": "One entry per painted asset in public/jungle/. pipeline.py walks this list and runs raw -> key -> upscale -> export for each entry. audit.py reads the 'upscale.factor' to know an asset's REAL source resolution.",
+    "id": "stable slug for the asset; names the raw file and the work/ intermediates.",
+    "role": "'mass' = low-frequency background/band read at large screen coverage. 'detail' = oversampled sprite/prop read small on screen. Informational; it does not change the pipeline.",
+    "gen": "how the raw was generated. 'size' is the generator's native output (never larger than 1536 on the long edge), 'quality' is the generator's own quality knob, 'prompt' is the verbatim prompt so the raw is reproducible.",
+    "raw": "path, relative to tools/gen/, of the generated PNG. Must be painted on a solid ~black backdrop for key.py.",
+    "key": "keying thresholds, see key.py. 't_bg': L below this is backdrop. 't_fg': L at/above this is fully opaque. 'soft_px': width of the soft alpha band eroded in from the matte edge.",
+    "upscale": "'factor' multiplies the keyed resolution. 'engine': 'lanczos' (always available) or 'esrgan' (falls back to lanczos when unavailable).",
+    "export": "'out' is the WebP path relative to tools/gen/ (so ../../public/jungle/<name>.webp). 'quality' is the WebP quality 1-100. Add an optional 'width' to cap the exported width."
+  },
+  "entries": [
+    {
+      "id": "example-fern",
+      "role": "detail",
+      "gen": {
+        "size": "1024x1536",
+        "quality": "high",
+        "prompt": "a single backlit jungle fern frond, painted, isolated on a pure black background, no ground, no vignette",
+        "$comment": "replace this whole entry with real assets; it exists to document the shape"
+      },
+      "raw": "raw/example-fern.png",
+      "key": { "t_bg": 14, "t_fg": 40, "soft_px": 2 },
+      "upscale": { "factor": 2.0, "engine": "lanczos" },
+      "export": { "out": "../../public/jungle/example-fern.webp", "quality": 88 }
+    }
+  ]
+}
