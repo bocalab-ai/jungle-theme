@@ -11,18 +11,95 @@
   },
   "entries": [
     {
-      "id": "example-fern",
-      "role": "detail",
+      "id": "tree-a-mass",
+      "role": "mass",
       "gen": {
         "size": "1024x1536",
         "quality": "high",
-        "prompt": "a single backlit jungle fern frond, painted, isolated on a pure black background, no ground, no vignette",
-        "$comment": "replace this whole entry with real assets; it exists to document the shape"
+        "prompt": "A single massive ancient fantasy jungle tree, full figure, isolated on a SOLID PURE BLACK background (#000000) — every background pixel pure black, no vignette, no haze, no stars, no ground plane beyond the roots. Digital painting for a 2.5D parallax game layer, bioluminescent night-jungle style (Avatar-like). Dark moss-covered twisting trunk with broad buttress roots at the base, and two wide umbrella-like canopy tiers (a large upper crown and a smaller lower side crown). IMPORTANT: the canopy reads as SOFT BROAD MASSES of deep-teal foliage with a gentle cyan bioluminescent glow from within — no individual leaves, no tiny flowers, no mushrooms, no hanging vines, no fine tendrils, no small details anywhere. Smooth painterly low-frequency forms, soft simple silhouette. Palette: deep teal and cyan glow on the canopy, dark desaturated green-brown on the trunk. The tree fills the frame top to bottom."
       },
-      "raw": "raw/example-fern.png",
+      "raw": "raw/tree-a-mass.png",
       "key": { "t_bg": 14, "t_fg": 40, "soft_px": 2 },
       "upscale": { "factor": 2.0, "engine": "lanczos" },
-      "export": { "out": "../../public/jungle/example-fern.webp", "quality": 88 }
+      "export": { "out": "../../public/jungle/tree-a-mass.webp", "quality": 82 }
+    },
+    {
+      "id": "flower-cluster",
+      "role": "detail",
+      "gen": {
+        "size": "1024x1024",
+        "quality": "high",
+        "prompt": "A cluster of small glowing amber-orange jungle flowers with tiny white-hot centers, nestled among a few dark teal palm fronds, painted in a lush bioluminescent night-jungle digital-painting style (fantasy, Avatar-like). The cluster is centered and fills about 70% of the frame. Isolated on a SOLID PURE BLACK background (#000000) — no vignette, no glow haze filling the background, no stars, no ground; every background pixel pure black. Crisp painterly detail, rich saturated color, soft rim light on petals."
+      },
+      "raw": "raw/flower-cluster.png",
+      "key": { "t_bg": 14, "t_fg": 40, "soft_px": 2 },
+      "upscale": { "factor": 1.0, "engine": "lanczos" },
+      "export": { "out": "../../public/jungle/flower-cluster.webp", "quality": 85 }
+    },
+    {
+      "id": "vine-curtain",
+      "role": "detail",
+      "gen": {
+        "size": "1024x1024",
+        "quality": "high",
+        "prompt": "A hanging curtain of bioluminescent jungle vines: several thin vines hanging straight down from a dark mossy branch that crosses the very top of the frame, each vine strung with tiny glowing cyan-white bead-like droplets, a few dark small leaves. Lush fantasy night-jungle digital-painting style. Isolated on a SOLID PURE BLACK background (#000000) — no vignette, no glow haze filling the background, every background pixel pure black. Crisp painterly detail."
+      },
+      "raw": "raw/vine-curtain.png",
+      "key": { "t_bg": 14, "t_fg": 40, "soft_px": 2 },
+      "upscale": { "factor": 1.0, "engine": "lanczos" },
+      "export": { "out": "../../public/jungle/vine-curtain.webp", "quality": 85 }
+    },
+    {
+      "id": "leaf-clump",
+      "role": "detail",
+      "gen": {
+        "size": "1024x1024",
+        "quality": "high",
+        "prompt": "A single clump of dense jungle-canopy foliage: dark deep-teal leaves with individually painted crisp edges, speckled with small cyan bioluminescent dots and a few glowing leaf tips, like a piece of a giant tree's crown seen at night. Fantasy bioluminescent night-jungle digital-painting style (Avatar-like). The clump is centered, roughly round, filling about 75% of the frame. Isolated on a SOLID PURE BLACK background (#000000) — no vignette, no haze, every background pixel pure black. Crisp painterly detail."
+      },
+      "raw": "raw/leaf-clump.png",
+      "key": { "t_bg": 14, "t_fg": 40, "soft_px": 2 },
+      "upscale": { "factor": 1.0, "engine": "lanczos" },
+      "export": { "out": "../../public/jungle/leaf-clump.webp", "quality": 85 }
+    },
+    {
+      "id": "fungi-shelf",
+      "role": "detail",
+      "gen": {
+        "size": "1024x1024",
+        "quality": "high",
+        "prompt": "A cluster of glowing blue-cyan shelf mushrooms (bracket fungi) growing on a piece of dark mossy tree bark, some tiny glowing spore dots drifting just above them. Fantasy bioluminescent night-jungle digital-painting style. Cluster centered, filling about 65% of the frame. Isolated on a SOLID PURE BLACK background (#000000) — no vignette, no background haze, every background pixel pure black. Crisp painterly detail."
+      },
+      "raw": "raw/fungi-shelf.png",
+      "key": { "t_bg": 14, "t_fg": 40, "soft_px": 2 },
+      "upscale": { "factor": 1.0, "engine": "lanczos" },
+      "export": { "out": "../../public/jungle/fungi-shelf.webp", "quality": 85 }
+    },
+    {
+      "id": "fern-rosette",
+      "role": "detail",
+      "gen": {
+        "size": "1024x1024",
+        "quality": "high",
+        "prompt": "A bioluminescent epiphyte fern rosette: arching dark-teal fronds radiating from a central mossy core, each frond edged and tipped with a glowing cyan line of light. Fantasy night-jungle digital-painting style (Avatar-like). Rosette centered, filling about 70% of the frame. Isolated on a SOLID PURE BLACK background (#000000) — no vignette, no haze, every background pixel pure black. Crisp painterly detail."
+      },
+      "raw": "raw/fern-rosette.png",
+      "key": { "t_bg": 14, "t_fg": 40, "soft_px": 2 },
+      "upscale": { "factor": 1.0, "engine": "lanczos" },
+      "export": { "out": "../../public/jungle/fern-rosette.webp", "quality": 85 }
+    },
+    {
+      "id": "glow-pods",
+      "role": "detail",
+      "gen": {
+        "size": "1024x1024",
+        "quality": "high",
+        "prompt": "A small patch of dark moss on bark with a scatter of glowing amber-orange bioluminescent seed pods and two or three tiny cyan glow dots, fantasy night-jungle digital-painting style. Patch centered, filling about 60% of the frame. Isolated on a SOLID PURE BLACK background (#000000) — no vignette, no haze, every background pixel pure black. Crisp painterly detail."
+      },
+      "raw": "raw/glow-pods.png",
+      "key": { "t_bg": 14, "t_fg": 40, "soft_px": 2 },
+      "upscale": { "factor": 1.0, "engine": "lanczos" },
+      "export": { "out": "../../public/jungle/glow-pods.webp", "quality": 85 }
     }
   ]
 }
