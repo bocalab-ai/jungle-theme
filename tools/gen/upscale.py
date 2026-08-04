@@ -37,6 +37,12 @@ def _lanczos_plane(arr, size, mode):
 
 
 def _pip(args):
+    probe = subprocess.run([sys.executable, "-m", "pip", "--version"], capture_output=True, text=True)
+    if probe.returncode != 0:
+        probe.stderr = (
+            "no pip for this interpreter (%s): %s" % (sys.executable, probe.stderr.strip())
+        )
+        return probe
     return subprocess.run(
         [sys.executable, "-m", "pip", "install", "--user", *args],
         capture_output=True,
