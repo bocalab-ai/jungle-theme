@@ -674,7 +674,7 @@ export function JungleScene({
       });
 
     const loadInto = (mat: THREE.ShaderMaterial, name: string) => {
-      texLoader.load(`/jungle/${name}.webp?v=${ASSET_V}`, (tex) => {
+      texLoader.load(`${import.meta.env.BASE_URL}jungle/${name}.webp?v=${ASSET_V}`, (tex) => {
         tex.colorSpace = THREE.SRGBColorSpace;
         tex.anisotropy = 4;
         mat.uniforms.uMap.value = tex;
@@ -1088,7 +1088,7 @@ export function JungleScene({
     >
       {/* poster under the canvas; sole visual on mobile / reduced motion / no WebGL */}
       <img
-        src="/jungle/fallback.webp"
+        src={`${import.meta.env.BASE_URL}jungle/fallback.webp`}
         alt=""
         style={{
           position: "absolute",
